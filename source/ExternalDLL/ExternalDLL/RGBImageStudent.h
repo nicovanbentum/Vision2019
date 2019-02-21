@@ -6,8 +6,11 @@
 
 #pragma once
 #include "RGBImage.h"
+#include <vector>
+
 class RGBImageStudent : public RGBImage {
 public:
+	std::vector<RGB> data;
 
 	RGBImageStudent();
 	RGBImageStudent(const RGBImageStudent &other);

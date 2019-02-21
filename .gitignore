@@ -2,3 +2,5 @@
 *.db
 x64/
 .vs/
+source/ExternalDLL/.vs/ExternalDLL2017/v15/.suo
+source/ExternalDLL/.vs/ExternalDLL2017/v15/Browse.VC.db

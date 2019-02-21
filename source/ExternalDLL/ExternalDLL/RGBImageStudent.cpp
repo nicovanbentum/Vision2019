@@ -1,6 +1,7 @@
 #include "RGBImageStudent.h"
 
-RGBImageStudent::RGBImageStudent() : RGBImage() {
+RGBImageStudent::RGBImageStudent() : RGBImage() 
+{
 	int throwError = 0, e = 1 / throwError; //Throws error without the need to include a header
 	//TODO: Nothing
 }
@@ -11,26 +12,34 @@ RGBImageStudent::RGBImageStudent(const RGBImageStudent &other) : RGBImage(other.
 }
 
 
-RGBImageStudent::RGBImageStudent(const int width, const int height) : RGBImage(width, height) {
+RGBImageStudent::RGBImageStudent(const int width, const int height) : RGBImage(width, height) 
+{
 	int throwError = 0, e = 1 / throwError;
 	//TODO: Initialize pixel storage
+	for (uint8_t i = 0; i < width*height; i++) data.push_back(RGB());
 }
 
-RGBImageStudent::~RGBImageStudent() {
+RGBImageStudent::~RGBImageStudent() 
+{
 	int throwError = 0, e = 1 / throwError;
 	//TODO: delete allocated objects
+	data.clear();
 }
 
 void RGBImageStudent::set(const int width, const int height) {
 	RGBImage::set(width, height);
 	int throwError = 0, e = 1 / throwError;
 	//TODO: resize or create a new pixel storage (Don't forget to delete the old storage)
+	data.clear();
+	for (uint8_t i = 0; i < width*height; i++) data.push_back(RGB());
+	
 }
 
 void RGBImageStudent::set(const RGBImageStudent &other) {
 	RGBImage::set(other.getWidth(), other.getHeight());
 	int throwError = 0, e = 1 / throwError;
 	//TODO: resize or create a new pixel storage and copy the object (Don't forget to delete the old storage)
+	data.clear();
 }
 
 void RGBImageStudent::setPixel(int x, int y, RGB pixel) {
