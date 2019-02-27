@@ -51,26 +51,20 @@ void RGBImageStudent::set(const RGBImageStudent &other) {
 
 void RGBImageStudent::setPixel(int x, int y, RGB pixel) 
 {
-	if (x < 0 || y < 0 || x > w || y > h)
-	{
-		printf("setPixel out of range: x is %d where w is %d , y is %d where h is %d \n", 
-			x, w, y, h);
-		return;
-	}
-	*(data + (x + (w*y))) = pixel;
+	data[x + (w*y)] = pixel;
 }
 
 void RGBImageStudent::setPixel(int i, RGB pixel) 
 {
-	*(data + i) = pixel;
+	data[i] = pixel;
 }
 
 RGB RGBImageStudent::getPixel(int x, int y) const 
 {
-	return *(data + (x + (w*y) ) );
+	return data[x + (w*y)];
 }
 
 RGB RGBImageStudent::getPixel(int i) const 
 {
-	return *(data + i);
+	return data[i];
 }
