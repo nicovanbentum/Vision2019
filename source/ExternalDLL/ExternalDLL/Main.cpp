@@ -4,6 +4,7 @@
 * Proprietary and confidential
 */
 
+#include <chrono>
 #include <iostream> //std::cout
 #include "ImageIO.h" //Image load and save functionality
 #include "HereBeDragons.h"
@@ -15,35 +16,83 @@ bool executeSteps(DLLExecution * executor);
 
 int main(int argc, char * argv[]) {
 
-	//ImageFactory::setImplementation(ImageFactory::DEFAULT);
-	ImageFactory::setImplementation(ImageFactory::STUDENT);
+	ImageFactory::setImplementation(ImageFactory::DEFAULT);
 
 	ImageIO::debugFolder = "C:\\Synced Files\\V2VISN1\\Debug";
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
-	RGBImage * input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage("..\\..\\..\\testsets\\Set A\\TestSet Images\\male-2.png", *input)) {
-		std::cout << "Image could not be loaded!" << std::endl;
-		system("pause");
-		return 0;
-	}
-
-	ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
-
-	DLLExecution * executor = new DLLExecution(input);
-
-	if (executeSteps(executor)) {
-		std::cout << "Face recognition successful!" << std::endl;
-		std::cout << "Facial parameters: " << std::endl;
-		for (int i = 0; i < 16; i++) {
-			std::cout << (i+1) << ": " << executor->facialParameters[i] << std::endl;
+	auto t1 = std::chrono::high_resolution_clock::now(); //get the current time
+	for (uint8_t i = 20; i > 0; i--) //do the entire facial recognition process 20 times
+	{
+		RGBImage * input = ImageFactory::newRGBImage();
+		if (!ImageIO::loadImage("..\\..\\..\\testsets\\Set A\\TestSet Images\\male-2.png", *input)) {
+			std::cout << "Image could not be loaded!" << std::endl;
+			system("pause");
+			return 0;
 		}
-	}
 
-	delete executor;
+		ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
+
+		DLLExecution * executor = new DLLExecution(input);
+
+		if (executeSteps(executor)) {
+			std::cout << "Face recognition successful!" << std::endl;
+			std::cout << "Facial parameters: " << std::endl;
+			for (int i = 0; i < 16; i++) {
+				std::cout << (i + 1) << ": " << executor->facialParameters[i] << std::endl;
+			}
+		}
+		delete executor;
+	}
+	auto t2 = std::chrono::high_resolution_clock::now();
+	auto default_time = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+	ImageFactory::setImplementation(ImageFactory::STUDENT);
+
+	auto tt1 = std::chrono::high_resolution_clock::now();
+	for (uint8_t i = 20; i > 0; i--) //do the entire facial recognition process 20 times
+	{
+		RGBImage * input = ImageFactory::newRGBImage();
+		if (!ImageIO::loadImage("..\\..\\..\\testsets\\Set A\\TestSet Images\\male-2.png", *input)) {
+			std::cout << "Image could not be loaded!" << std::endl;
+			system("pause");
+			return 0;
+		}
+
+		ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
+
+		DLLExecution * executor = new DLLExecution(input);
+
+		if (executeSteps(executor)) {
+			std::cout << "Face recognition successful!" << std::endl;
+			std::cout << "Facial parameters: " << std::endl;
+			for (int i = 0; i < 16; i++) {
+				std::cout << (i + 1) << ": " << executor->facialParameters[i] << std::endl;
+			}
+		}
+		delete executor;
+	}
+	auto tt2 = std::chrono::high_resolution_clock::now();
+	auto student_time = std::chrono::duration_cast<std::chrono::microseconds>(tt2 - tt1).count();
+
+
+	std::cout << "Default implementation time: " << default_time << "ms" << std::endl;
+	std::cout << "Student implementation time: " << student_time << "ms" << std::endl;
+
+
 	system("pause");
 	return 1;
 }
+
+
+
+
+
+
+
+
+
+
 
 bool executeSteps(DLLExecution * executor) {
 	//Execute the four Pre-processing steps
