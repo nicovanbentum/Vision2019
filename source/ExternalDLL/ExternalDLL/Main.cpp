@@ -45,19 +45,9 @@ int main(int argc, char * argv[]) {
 	return 1;
 }
 
-
-
-
-
-
-
-
-
-
 bool executeSteps(DLLExecution * executor) {
-
 	//Execute the four Pre-processing steps
-	if (!executor->executePreProcessingStep1(false)) {
+	if (!executor->executePreProcessingStep1(true)) {
 		std::cout << "Pre-processing step 1 failed!" << std::endl;
 		return false;
 	}

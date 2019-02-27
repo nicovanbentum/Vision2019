@@ -41,9 +41,6 @@ IntensityImage * ImageFactory::ImplementationPrivate::newIntensityImage() const 
 	return new IntensityImagePrivate();
 }
 
-
-
-
 //Static factory methods
 RGBImage * ImageFactory::newRGBImage(const int width, const int height) {
 	return getImplementation()->newRGBImage(width, height);
