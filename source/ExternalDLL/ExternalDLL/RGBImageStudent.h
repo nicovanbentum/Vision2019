@@ -10,7 +10,9 @@
 
 class RGBImageStudent : public RGBImage {
 public:
-	std::vector<RGB> data;
+	RGB * data = nullptr;
+	unsigned int w = 0;
+	unsigned int h = 0;
 
 	RGBImageStudent();
 	RGBImageStudent(const RGBImageStudent &other);

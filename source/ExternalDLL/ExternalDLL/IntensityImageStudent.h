@@ -6,8 +6,14 @@
 
 #pragma once
 #include "IntensityImage.h"
+#include <vector>
+
 class IntensityImageStudent : public IntensityImage {
 public:
+	Intensity * data = nullptr;
+	unsigned int w = 0;
+	unsigned int h = 0;
+
 	IntensityImageStudent();
 	IntensityImageStudent(const IntensityImageStudent &other);
 	IntensityImageStudent(const int width, const int height);

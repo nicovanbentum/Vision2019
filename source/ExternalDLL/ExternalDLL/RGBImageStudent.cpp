@@ -1,74 +1,76 @@
 #include "RGBImageStudent.h"
 
-RGBImageStudent::RGBImageStudent() : RGBImage() 
+RGBImageStudent::RGBImageStudent() : RGBImage() {}
+
+RGBImageStudent::RGBImageStudent(const RGBImageStudent &other) 
+	: RGBImage(other.getWidth(), other.getHeight()) 
 {
-	//TODO: Nothing
+	h = other.h;
+	w = other.w;
+	delete[] data;
+	data = new RGB[w * h];
+	data = other.data;
 }
 
-RGBImageStudent::RGBImageStudent(const RGBImageStudent &other) : RGBImage(other.getWidth(), other.getHeight()) {
-	//TODO: Create a copy from the other object
-	for (uint8_t i = 0; i < other.data.size()-1; i++) data.push_back(RGB());
-}
 
-
-RGBImageStudent::RGBImageStudent(const int width, const int height) : RGBImage(width, height) 
+RGBImageStudent::RGBImageStudent(const int width, const int height)
+	: RGBImage(width, height) 
 {
-	//TODO: Initialize pixel storage
-	for (uint8_t i = 0; i < width*height; i++) data.push_back(RGB());
+	h = height;
+	w = width;
+	delete[] data;
+	data = new RGB[w * h];
 }
 
 RGBImageStudent::~RGBImageStudent() 
 {
-	//TODO: delete allocated objects
-	data.clear();
+	delete[] data;
+	data = nullptr;
 }
 
 void RGBImageStudent::set(const int width, const int height) {
 	RGBImage::set(width, height);
-	//TODO: resize or create a new pixel storage (Don't forget to delete the old storage)
-	data.clear();
-	for (uint8_t i = 0; i < width*height; i++) data.push_back(RGB());
+	
+	h = height;
+	w = width;
+	delete[] data;
+	data = new RGB[width * height];
 	
 }
 
 void RGBImageStudent::set(const RGBImageStudent &other) {
 	RGBImage::set(other.getWidth(), other.getHeight());
-	//TODO: resize or create a new pixel storage and copy the object (Don't forget to delete the old storage)
-	data.clear();
+	
+	h = other.h;
+	w = other.w;
+	delete[] data;
+	data = new RGB[w * h];
 	data = other.data;
+
 }
 
 void RGBImageStudent::setPixel(int x, int y, RGB pixel) 
 {
-	data[x*y] = pixel;
+	if (x < 0 || y < 0 || x > w || y > h)
+	{
+		printf("setPixel out of range: x is %d where w is %d , y is %d where h is %d \n", 
+			x, w, y, h);
+		return;
+	}
+	*(data + (x + (w*y))) = pixel;
 }
 
-void RGBImageStudent::setPixel(int i, RGB pixel) {
-	/*
-	* Original 2d image (values):
-	* 9 1 2
-	* 4 3 5
-	* 8 7 8
-	*
-	* 1d representation (i, value):
-	* i		value
-	* 0		9
-	* 1		1
-	* 2		2
-	* 3		4
-	* 4		3
-	* 5		5
-	* 6		8
-	* 7		7
-	* 8		8
-	*/
-	data[i] = pixel;
+void RGBImageStudent::setPixel(int i, RGB pixel) 
+{
+	*(data + i) = pixel;
 }
 
-RGB RGBImageStudent::getPixel(int x, int y) const {
-	return data[x*y];
+RGB RGBImageStudent::getPixel(int x, int y) const 
+{
+	return *(data + (x + (w*y) ) );
 }
 
-RGB RGBImageStudent::getPixel(int i) const {
-	return data[i];
+RGB RGBImageStudent::getPixel(int i) const 
+{
+	return *(data + i);
 }
