@@ -12,9 +12,11 @@
 #include "DLLExecution.h"
 
 void drawFeatureDebugImage(IntensityImage &image, FeatureMap &features);
-bool executeSteps(DLLExecution * executor);
+bool executeSteps(DLLExecution * executor, bool student);
 
 int main(int argc, char * argv[]) {
+
+	uint8_t runs = 20;
 
 	ImageFactory::setImplementation(ImageFactory::DEFAULT);
 
@@ -22,7 +24,7 @@ int main(int argc, char * argv[]) {
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 	auto t1 = std::chrono::high_resolution_clock::now(); //get the current time
-	for (uint8_t i = 20; i > 0; i--) //do the entire facial recognition process 20 times
+	for (uint8_t i = runs; i > 0; i--) //do the entire facial recognition process i times
 	{
 		RGBImage * input = ImageFactory::newRGBImage();
 		if (!ImageIO::loadImage("..\\..\\..\\testsets\\Set A\\TestSet Images\\male-2.png", *input)) {
@@ -35,7 +37,7 @@ int main(int argc, char * argv[]) {
 
 		DLLExecution * executor = new DLLExecution(input);
 
-		if (executeSteps(executor)) {
+		if (executeSteps(executor, false)) {
 			std::cout << "Face recognition successful!" << std::endl;
 			std::cout << "Facial parameters: " << std::endl;
 			for (int i = 0; i < 16; i++) {
@@ -45,12 +47,14 @@ int main(int argc, char * argv[]) {
 		delete executor;
 	}
 	auto t2 = std::chrono::high_resolution_clock::now();
-	auto default_time = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+	auto default_time = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 
+	
+	
 	ImageFactory::setImplementation(ImageFactory::STUDENT);
 
 	auto tt1 = std::chrono::high_resolution_clock::now();
-	for (uint8_t i = 20; i > 0; i--) //do the entire facial recognition process 20 times
+	for (uint8_t i = runs; i > 0; i--) //do the entire facial recognition process i times
 	{
 		RGBImage * input = ImageFactory::newRGBImage();
 		if (!ImageIO::loadImage("..\\..\\..\\testsets\\Set A\\TestSet Images\\male-2.png", *input)) {
@@ -63,7 +67,7 @@ int main(int argc, char * argv[]) {
 
 		DLLExecution * executor = new DLLExecution(input);
 
-		if (executeSteps(executor)) {
+		if (executeSteps(executor, true)) {
 			std::cout << "Face recognition successful!" << std::endl;
 			std::cout << "Facial parameters: " << std::endl;
 			for (int i = 0; i < 16; i++) {
@@ -73,13 +77,11 @@ int main(int argc, char * argv[]) {
 		delete executor;
 	}
 	auto tt2 = std::chrono::high_resolution_clock::now();
-	auto student_time = std::chrono::duration_cast<std::chrono::microseconds>(tt2 - tt1).count();
+	auto student_time = std::chrono::duration_cast<std::chrono::milliseconds>(tt2 - tt1).count();
 
 
-	std::cout << "Default implementation time: " << default_time << "ms" << std::endl;
-	std::cout << "Student implementation time: " << student_time << "ms" << std::endl;
-
-
+	std::cout << "Default implementation time: " << default_time / runs << "ms" << std::endl;
+	std::cout << "Student implementation time: " << student_time / runs << "ms" << std::endl;
 	system("pause");
 	return 1;
 }
@@ -90,13 +92,9 @@ int main(int argc, char * argv[]) {
 
 
 
-
-
-
-
-bool executeSteps(DLLExecution * executor) {
+bool executeSteps(DLLExecution * executor, bool student) {
 	//Execute the four Pre-processing steps
-	if (!executor->executePreProcessingStep1(true)) {
+	if (!executor->executePreProcessingStep1(student)) {
 		std::cout << "Pre-processing step 1 failed!" << std::endl;
 		return false;
 	}
