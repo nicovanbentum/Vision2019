@@ -7,7 +7,7 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
 {
 	auto intensity_img = ImageFactory::newIntensityImage(image.getWidth(), image.getHeight());
 	
-	for (int i = image.getHeight()*image.getWidth(); i > -1; i--)
+	for (unsigned int i = 0; i < image.getHeight() * image.getWidth(); i++)
 	{
 		auto pixel = image.getPixel(i);
 		Intensity i_pixel = sqrt( (pow(pixel.r, 2) * .241) 

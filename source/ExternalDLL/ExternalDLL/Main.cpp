@@ -17,12 +17,11 @@ bool executeSteps(DLLExecution * executor, bool student);
 int main(int argc, char * argv[]) {
 
 	uint8_t runs = 20;
-
-	ImageFactory::setImplementation(ImageFactory::DEFAULT);
-
 	ImageIO::debugFolder = "C:\\Synced Files\\V2VISN1\\Debug";
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
+
+	ImageFactory::setImplementation(ImageFactory::DEFAULT);
 	auto t1 = std::chrono::high_resolution_clock::now(); //get the current time
 	for (uint8_t i = runs; i > 0; i--) //do the entire facial recognition process i times
 	{
@@ -37,7 +36,7 @@ int main(int argc, char * argv[]) {
 
 		DLLExecution * executor = new DLLExecution(input);
 
-		if (executeSteps(executor, false)) {
+		if (executeSteps(executor, false)) { //false means default intensity img
 			std::cout << "Face recognition successful!" << std::endl;
 			std::cout << "Facial parameters: " << std::endl;
 			for (int i = 0; i < 16; i++) {
@@ -49,10 +48,10 @@ int main(int argc, char * argv[]) {
 	auto t2 = std::chrono::high_resolution_clock::now();
 	auto default_time = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 
-	
-	
-	ImageFactory::setImplementation(ImageFactory::STUDENT);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////
 
+	ImageFactory::setImplementation(ImageFactory::STUDENT);
 	auto tt1 = std::chrono::high_resolution_clock::now();
 	for (uint8_t i = runs; i > 0; i--) //do the entire facial recognition process i times
 	{
@@ -67,7 +66,7 @@ int main(int argc, char * argv[]) {
 
 		DLLExecution * executor = new DLLExecution(input);
 
-		if (executeSteps(executor, true)) {
+		if (executeSteps(executor, true)) { //true means student intensity img
 			std::cout << "Face recognition successful!" << std::endl;
 			std::cout << "Facial parameters: " << std::endl;
 			for (int i = 0; i < 16; i++) {
@@ -91,7 +90,7 @@ int main(int argc, char * argv[]) {
 
 
 
-
+//added a parameter student to be able to switch between the student preprocessing and default
 bool executeSteps(DLLExecution * executor, bool student) {
 	//Execute the four Pre-processing steps
 	if (!executor->executePreProcessingStep1(student)) {
